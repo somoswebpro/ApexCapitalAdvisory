@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Apex Capital Advisory | Asesoría financiera e inversiones</title>
+    <meta name="description" content="Estrategias de inversión personalizadas, gestión de patrimonios y asesoría financiera para hacer crecer tu capital con confianza.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- GSAP para animaciones avanzadas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Inter + Playfair Display (más elegante) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        apex: {
+                            50: '#f0f4f8',
+                            100: '#d9e2ec',
+                            200: '#bcccd9',
+                            300: '#9fb3c8',
+                            400: '#829ab1',
+                            500: '#62748c',
+                            600: '#486581',
+                            700: '#334e68',
+                            800: '#243b53',
+                            900: '#102a43',
+                            950: '#0a1c2e',
+                        },
+                        gold: {
+                            50: '#fef8e8',
+                            100: '#fdebc2',
+                            200: '#fade8c',
+                            300: '#f7ce58',
+                            400: '#f4bf32',
+                            500: '#e8aa14',
+                            600: '#c88c10',
+                            700: '#a26d0d',
+                            800: '#7e530a',
+                            900: '#5a3b07',
+                        }
+                    },
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards',
+                        'fade-in': 'fadeIn 0.6s ease-out forwards',
+                        'scale-subtle': 'scaleSubtle 0.5s ease-out forwards',
+                        'shimmer': 'shimmer 2s infinite',
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        scaleSubtle: {
+                            '0%': { opacity: '0', transform: 'scale(0.96)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            color: #1a2a3e;
+            overflow-x: hidden;
+        }
+        
+        /* Glassmorphism refinado */
+        .glass-premium {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(72, 101, 129, 0.12);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
+        }
+        
+        .glass-card {
+            background: #ffffff;
+            border: 1px solid rgba(72, 101, 129, 0.1);
+            border-radius: 1.75rem;
+            transition: all 0.4s cubic-bezier(0.2, 0.95, 0.4, 1.05);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02);
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.12);
+            border-color: rgba(232, 170, 20, 0.25);
+        }
+        
+        /* Botón primario dorado institucional */
+        .btn-primary {
+            background: #e8aa14;
+            color: #0a1c2e;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(232, 170, 20, 0.2);
+        }
+        
+        .btn-primary:hover {
+            background: #c88c10;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -10px rgba(232, 170, 20, 0.35);
+        }
+        
+        /* Botón secundario outline */
+        .btn-outline {
+            border: 1.5px solid #e8aa14;
+            color: #e8aa14;
+            background: transparent;
+            transition: all 0.3s;
+        }
+        
+        .btn-outline:hover {
+            background: #e8aa14;
+            color: #0a1c2e;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -8px rgba(232, 170, 20, 0.3);
+        }
+        
+        /* Navegación con línea dorada */
+        .nav-link {
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #e8aa14;
+            transition: width 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero gradient profesional */
+        .hero-bg {
+            background: linear-gradient(125deg, #f8fafd 0%, #f0f4f8 50%, #e8edf3 100%);
+            position: relative;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 10% 20%, rgba(232, 170, 20, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        /* Tarjetas de servicio premium */
+        .service-card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            transition: all 0.4s;
+            border: 1px solid #eef2f6;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #e8aa14, #f4bf32, #e8aa14);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .service-card:hover {
+            border-color: rgba(232, 170, 20, 0.3);
+            box-shadow: 0 20px 35px -16px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Estadísticas */
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        /* Badge decorativo */
+        .badge-gold {
+            background: rgba(232, 170, 20, 0.08);
+            border: 1px solid rgba(232, 170, 20, 0.2);
+            border-radius: 100px;
+        }
+        
+        /* Scrollbar refinada */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #eef2f6; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #bcccd9; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9fb3c8; }
+        
+        /* Loader */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        
+        /* Inputs premium */
+        .input-premium {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+            color: #1a2a3e;
+            border-radius: 1rem;
+        }
+        
+        .input-premium:focus {
+            outline: none;
+            border-color: #e8aa14;
+            box-shadow: 0 0 0 3px rgba(232, 170, 20, 0.1);
+        }
+        
+        /* Línea decorativa dorada */
+        .gold-line {
+            width: 70px;
+            height: 2px;
+            background: linear-gradient(90deg, #e8aa14, #f4bf32, #e8aa14);
+            border-radius: 2px;
+        }
+        
+        /* Efecto hover en íconos sociales */
+        .social-icon {
+            transition: all 0.25s ease;
+        }
+        
+        .social-icon:hover {
+            color: #e8aa14;
+            transform: translateY(-3px);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Clase para animaciones con scroll */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Patrón de fondo sutil */
+        .pattern-dots {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Loader -->
+<div class="loader" id="loader">
+    <div class="flex flex-col items-center gap-4">
+        <div class="relative">
+            <div class="w-14 h-14 rounded-full border-2 border-apex-200 border-t-gold-500 animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <span class="text-gold-600 text-sm font-serif font-bold">A</span>
+            </div>
+        </div>
+        <p class="text-apex-700 font-serif text-sm tracking-widest uppercase">Apex Capital</p>
+    </div>
+</div>
+
+<!-- Navbar premium -->
+<nav class="fixed top-0 w-full z-50 transition-all duration-500 py-5" id="navbar">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer group" onclick="location.href='#inicio'">
+                <div class="w-10 h-10 rounded-full bg-apex-800 flex items-center justify-center shadow-md group-hover:shadow-lg transition">
+                    <span class="text-gold-400 font-serif text-xl font-bold">A</span>
+                </div>
+                <div>
+                    <span class="font-serif text-xl font-bold tracking-tight text-apex-800">Apex Capital</span>
+                    <span class="text-apex-400 text-xs block -mt-1">Advisory</span>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex gap-10 items-center">
+                <a href="#inicio" class="nav-link text-apex-600 hover:text-apex-800 transition text-sm font-medium">Inicio</a>
+                <a href="#servicios" class="nav-link text-apex-600 hover:text-apex-800 transition text-sm font-medium">Servicios</a>
+                <a href="#nosotros" class="nav-link text-apex-600 hover:text-apex-800 transition text-sm font-medium">Nosotros</a>
+                <a href="#contacto" class="btn-primary px-5 py-2.5 rounded-full text-sm font-semibold shadow-sm">
+                    <i class="fas fa-calendar-check mr-2"></i>Agendar cita
+                </a>
+            </div>
+            
+            <button id="mobileMenuBtn" class="md:hidden text-apex-600 text-xl focus:outline-none">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="hidden md:hidden mt-4 glass-premium rounded-2xl p-5 flex flex-col gap-4 shadow-xl">
+            <a href="#inicio" class="py-2 text-apex-700 hover:text-gold-600 transition font-medium">Inicio</a>
+            <a href="#servicios" class="py-2 text-apex-700 hover:text-gold-600 transition font-medium">Servicios</a>
+            <a href="#nosotros" class="py-2 text-apex-700 hover:text-gold-600 transition font-medium">Nosotros</a>
+            <a href="#contacto" class="btn-primary text-center py-3 rounded-full font-semibold">Agendar cita</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="inicio" class="relative min-h-screen flex items-center hero-bg pt-28 overflow-hidden">
+    <div class="absolute inset-0 pattern-dots opacity-20"></div>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="scroll-animate" id="heroLeft">
+                <div class="inline-flex items-center gap-2 badge-gold px-4 py-2 rounded-full mb-6">
+                    <i class="fas fa-chart-line text-gold-500 text-xs"></i>
+                    <span class="text-apex-700 text-xs font-semibold tracking-wide uppercase">Estrategias de inversión</span>
+                </div>
+                <h1 class="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-apex-900 leading-tight tracking-tight">
+                    Haz crecer tu <br>
+                    <span class="text-gold-600">capital</span> con<br>
+                    confianza
+                </h1>
+                <p class="text-apex-500 text-lg mt-6 leading-relaxed max-w-lg">
+                    Asesoría financiera personalizada, gestión de patrimonios y estrategias de inversión para asegurar tu futuro económico.
+                </p>
+                <div class="flex flex-wrap gap-4 mt-10">
+                    <a href="#contacto" class="btn-primary px-8 py-3.5 rounded-full text-base font-semibold inline-flex items-center gap-2 shadow-md">
+                        Comienza hoy <i class="fas fa-arrow-right text-sm"></i>
+                    </a>
+                    <a href="#servicios" class="btn-outline px-8 py-3.5 rounded-full text-base font-medium inline-flex items-center gap-2">
+                        <i class="fas fa-play-circle"></i> Conoce más
+                    </a>
+                </div>
+                
+                <!-- Trust badges -->
+                <div class="flex flex-wrap gap-8 mt-12 pt-6 border-t border-apex-100">
+                    <div class="flex items-center gap-2"><i class="fas fa-shield-alt text-gold-500 text-lg"></i><span class="text-apex-600 text-sm font-medium">Confidencialidad</span></div>
+                    <div class="flex items-center gap-2"><i class="fas fa-chart-pie text-gold-500 text-lg"></i><span class="text-apex-600 text-sm font-medium">Portafolio diversificado</span></div>
+                    <div class="flex items-center gap-2"><i class="fas fa-clock text-gold-500 text-lg"></i><span class="text-apex-600 text-sm font-medium">Soporte continuo</span></div>
+                </div>
+            </div>
+            
+            <div class="relative scroll-animate" id="heroRight">
+                <div class="glass-card p-8 rounded-3xl shadow-xl">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="text-center">
+                            <div class="stat-number text-4xl font-bold text-apex-800 counter" data-target="15" data-suffix="">0</div>
+                            <div class="text-apex-400 text-sm mt-1">Años de experiencia</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="stat-number text-4xl font-bold text-apex-800 counter" data-target="580" data-suffix="">0</div>
+                            <div class="text-apex-400 text-sm mt-1">Clientes atendidos</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="stat-number text-4xl font-bold text-apex-800 counter" data-target="450" data-suffix="M+">0</div>
+                            <div class="text-apex-400 text-sm mt-1">Capital gestionado</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="stat-number text-4xl font-bold text-apex-800 counter" data-target="99" data-suffix="%">0</div>
+                            <div class="text-apex-400 text-sm mt-1">Satisfacción</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-8 -right-8 w-40 h-40 bg-gold-500/5 rounded-full blur-2xl -z-10"></div>
+                <div class="absolute -top-8 -left-8 w-32 h-32 bg-apex-400/5 rounded-full blur-2xl -z-10"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce cursor-pointer z-10" onclick="document.getElementById('servicios').scrollIntoView({behavior:'smooth'})">
+        <div class="w-9 h-14 rounded-full border border-apex-300 flex justify-center pt-3 bg-white/40 backdrop-blur-sm">
+            <i class="fas fa-chevron-down text-apex-400 text-sm"></i>
+        </div>
+    </div>
+</section>
+
+<!-- Servicios Section -->
+<section id="servicios" class="py-28 px-6 bg-white">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16 scroll-animate">
+            <span class="text-gold-600 uppercase tracking-[0.2em] text-xs font-semibold">Nuestra oferta</span>
+            <h2 class="font-serif text-4xl md:text-5xl font-bold text-apex-900 mt-3">Soluciones financieras <br> <span class="text-gold-600">integrales</span></h2>
+            <div class="gold-line mx-auto mt-5"></div>
+            <p class="text-apex-500 max-w-2xl mx-auto mt-5">Estrategias diseñadas a tu medida, con un enfoque ético y orientado a resultados sostenibles.</p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="service-card p-8 service-item">
+                <div class="w-14 h-14 rounded-xl bg-gold-50 flex items-center justify-center mb-6">
+                    <i class="fas fa-chart-line text-gold-500 text-2xl"></i>
+                </div>
+                <h3 class="font-serif text-xl font-bold text-apex-800 mb-3">Estrategias de inversión</h3>
+                <p class="text-apex-500 text-sm leading-relaxed">Portafolios diversificados adaptados a tu perfil de riesgo, horizonte y objetivos financieros.</p>
+            </div>
+            <div class="service-card p-8 service-item">
+                <div class="w-14 h-14 rounded-xl bg-gold-50 flex items-center justify-center mb-6">
+                    <i class="fas fa-landmark text-gold-500 text-2xl"></i>
+                </div>
+                <h3 class="font-serif text-xl font-bold text-apex-800 mb-3">Gestión patrimonial</h3>
+                <p class="text-apex-500 text-sm leading-relaxed">Administración integral de tu patrimonio para preservar y multiplicar tu riqueza.</p>
+            </div>
+            <div class="service-card p-8 service-item">
+                <div class="w-14 h-14 rounded-xl bg-gold-50 flex items-center justify-center mb-6">
+                    <i class="fas fa-briefcase text-gold-500 text-2xl"></i>
+                </div>
+                <h3 class="font-serif text-xl font-bold text-apex-800 mb-3">Planeación financiera</h3>
+                <p class="text-apex-500 text-sm leading-relaxed">Planes personalizados para jubilación, educación y metas a largo plazo.</p>
+            </div>
+            <div class="service-card p-8 service-item">
+                <div class="w-14 h-14 rounded-xl bg-gold-50 flex items-center justify-center mb-6">
+                    <i class="fas fa-file-invoice-dollar text-gold-500 text-2xl"></i>
+                </div>
+                <h3 class="font-serif text-xl font-bold text-apex-800 mb-3">Optimización fiscal</h3>
+                <p class="text-apex-500 text-sm leading-relaxed">Estrategias legales para maximizar tu rentabilidad y minimizar impuestos.</p>
+            </div>
+            <div class="service-card p-8 service-item">
+                <div class="w-14 h-14 rounded-xl bg-gold-50 flex items-center justify-center mb-6">
+                    <i class="fas fa-building text-gold-500 text-2xl"></i>
+                </div>
+                <h3 class="font-serif text-xl font-bold text-apex-800 mb-3">Asesoría corporativa</h3>
+                <p class="text-apex-500 text-sm leading-relaxed">Soluciones financieras para empresas: estructuración, fusiones y expansión.</p>
+            </div>
+            <div class="service-card p-8 service-item">
+                <div class="w-14 h-14 rounded-xl bg-gold-50 flex items-center justify-center mb-6">
+                    <i class="fas fa-globe-americas text-gold-500 text-2xl"></i>
+                </div>
+                <h3 class="font-serif text-xl font-bold text-apex-800 mb-3">Inversiones globales</h3>
+                <p class="text-apex-500 text-sm leading-relaxed">Acceso a mercados internacionales y oportunidades en divisas y commodities.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Nosotros / Filosofía -->
+<section id="nosotros" class="py-28 px-6 bg-apex-50">
+    <div class="max-w-7xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="scroll-animate order-2 lg:order-1">
+                <span class="text-gold-600 uppercase tracking-[0.2em] text-xs font-semibold">Nuestra filosofía</span>
+                <h2 class="font-serif text-4xl md:text-5xl font-bold text-apex-900 mt-3 leading-tight">
+                    Invertir con <br><span class="text-gold-600">integridad y visión</span>
+                </h2>
+                <div class="gold-line my-6"></div>
+                <p class="text-apex-600 leading-relaxed mb-5">
+                    En Apex Capital Advisory creemos que las finanzas deben ser un medio para alcanzar la libertad y tranquilidad. 
+                    Por eso, combinamos análisis riguroso con un enfoque humano y personalizado.
+                </p>
+                <p class="text-apex-500 leading-relaxed mb-8">
+                    Nuestro equipo de expertos con más de 15 años de experiencia en los mercados financieros 
+                    te acompaña en cada decisión, asegurando transparencia y resultados sostenibles.
+                </p>
+                <div class="flex items-center gap-5">
+                    <div class="flex -space-x-2">
+                        <div class="w-10 h-10 rounded-full bg-apex-300 border-2 border-white flex items-center justify-center text-xs font-bold text-apex-800">JD</div>
+                        <div class="w-10 h-10 rounded-full bg-apex-400 border-2 border-white flex items-center justify-center text-xs font-bold text-white">MR</div>
+                        <div class="w-10 h-10 rounded-full bg-gold-500 border-2 border-white flex items-center justify-center text-xs font-bold text-apex-900">AC</div>
+                    </div>
+                    <div class="text-apex-500 text-sm font-medium">+ 12 asesores certificados</div>
+                </div>
+            </div>
+            <div class="scroll-animate order-1 lg:order-2">
+                <div class="relative">
+                    <div class="glass-card p-3 rounded-2xl overflow-hidden shadow-xl">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&h=550&fit=crop" alt="Asesoría financiera" class="rounded-xl w-full object-cover hover:scale-105 transition duration-700">
+                    </div>
+                    <div class="absolute -bottom-6 -left-6 w-28 h-28 bg-gold-500/10 rounded-full blur-2xl -z-10"></div>
+                    <div class="absolute -top-6 -right-6 w-36 h-36 bg-apex-400/10 rounded-full blur-2xl -z-10"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonios -->
+<section class="py-28 px-6 bg-white">
+    <div class="max-w-5xl mx-auto text-center">
+        <span class="text-gold-600 uppercase tracking-[0.2em] text-xs font-semibold">Testimonios</span>
+        <h2 class="font-serif text-3xl md:text-4xl font-bold text-apex-900 mt-3">Lo que dicen nuestros clientes</h2>
+        <div class="gold-line mx-auto mt-4 mb-12"></div>
+        
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="glass-card p-8 text-left testimonial-item">
+                <i class="fas fa-quote-left text-gold-300 text-2xl mb-4"></i>
+                <p class="text-apex-600 leading-relaxed mb-5">"El equipo de Apex transformó por completo mi forma de invertir. Ahora tengo un portafolio diversificado y rendimientos consistentes."</p>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-apex-200 flex items-center justify-center"><span class="font-bold text-apex-700">EC</span></div>
+                    <div><h4 class="font-semibold text-apex-800">Elena Carvajal</h4><p class="text-apex-400 text-xs">Empresaria</p></div>
+                </div>
+            </div>
+            <div class="glass-card p-8 text-left testimonial-item">
+                <i class="fas fa-quote-left text-gold-300 text-2xl mb-4"></i>
+                <p class="text-apex-600 leading-relaxed mb-5">"Confianza total. Me ayudaron a planificar mi jubilación y hoy vivo tranquilo sabiendo que mi capital está seguro y creciendo."</p>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-apex-200 flex items-center justify-center"><span class="font-bold text-apex-700">RM</span></div>
+                    <div><h4 class="font-semibold text-apex-800">Roberto Méndez</h4><p class="text-apex-400 text-xs">Inversionista</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contacto -->
+<section id="contacto" class="py-28 px-6 bg-apex-50">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12 scroll-animate">
+            <span class="text-gold-600 uppercase tracking-[0.2em] text-xs font-semibold">Comienza tu camino</span>
+            <h2 class="font-serif text-4xl md:text-5xl font-bold text-apex-900 mt-3">Agenda una consultoría <br><span class="text-gold-600">sin costo</span></h2>
+            <div class="gold-line mx-auto mt-4"></div>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-12">
+            <div class="space-y-7 scroll-animate">
+                <div class="flex items-start gap-4 p-4 rounded-xl bg-white/50">
+                    <div class="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center"><i class="fas fa-map-marker-alt text-gold-500"></i></div>
+                    <div><h4 class="font-semibold text-apex-800">Oficina principal</h4><p class="text-apex-500 text-sm">Paseo de la Reforma 509, CDMX</p></div>
+                </div>
+                <div class="flex items-start gap-4 p-4 rounded-xl bg-white/50">
+                    <div class="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center"><i class="fas fa-phone-alt text-gold-500"></i></div>
+                    <div><h4 class="font-semibold text-apex-800">Teléfono</h4><p class="text-apex-500 text-sm">+52 (55) 1234 5678</p></div>
+                </div>
+                <div class="flex items-start gap-4 p-4 rounded-xl bg-white/50">
+                    <div class="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center"><i class="fas fa-envelope text-gold-500"></i></div>
+                    <div><h4 class="font-semibold text-apex-800">Email</h4><p class="text-apex-500 text-sm">contacto@apexcapital.com</p></div>
+                </div>
+                <div class="pt-4 flex gap-5 justify-start">
+                    <i class="fab fa-linkedin-in text-apex-400 hover:text-gold-500 cursor-pointer transition text-xl social-icon"></i>
+                    <i class="fab fa-twitter text-apex-400 hover:text-gold-500 cursor-pointer transition text-xl social-icon"></i>
+                    <i class="fab fa-instagram text-apex-400 hover:text-gold-500 cursor-pointer transition text-xl social-icon"></i>
+                </div>
+            </div>
+            
+            <div class="glass-card p-8 scroll-animate shadow-xl">
+                <form id="contactForm" class="space-y-5">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <input type="text" id="name" placeholder="Nombre completo" class="input-premium w-full rounded-xl px-5 py-3 text-sm">
+                        <input type="email" id="email" placeholder="Correo electrónico" class="input-premium w-full rounded-xl px-5 py-3 text-sm">
+                    </div>
+                    <input type="tel" id="phone" placeholder="Teléfono" class="input-premium w-full rounded-xl px-5 py-3 text-sm">
+                    <select id="interest" class="input-premium w-full rounded-xl px-5 py-3 text-sm">
+                        <option value="">Selecciona un servicio</option>
+                        <option>Asesoría financiera personal</option>
+                        <option>Gestión patrimonial</option>
+                        <option>Planeación para jubilación</option>
+                        <option>Asesoría corporativa</option>
+                    </select>
+                    <textarea id="message" rows="3" placeholder="Cuéntanos sobre tus objetivos financieros..." class="input-premium w-full rounded-xl px-5 py-3 text-sm"></textarea>
+                    <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-semibold text-base">Solicitar consultoría gratuita</button>
+                    <p class="text-apex-400 text-xs text-center">Sin compromiso. Un asesor te contactará en 24h.</p>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-apex-900 py-12">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <div class="flex justify-center items-center gap-2 mb-5">
+            <div class="w-8 h-8 rounded-full bg-gold-500/20 flex items-center justify-center"><span class="text-gold-400 text-base font-bold">A</span></div>
+            <span class="font-serif text-xl text-white tracking-tight">Apex Capital Advisory</span>
+        </div>
+        <p class="text-apex-300 text-sm">© 2026 Apex Capital Advisory. Todos los derechos reservados.</p>
+        <p class="text-apex-400 text-xs mt-2">Invertir conlleva riesgos. Asesoría profesional personalizada.</p>
+    </div>
+</footer>
+
+<script>
+    // Loader
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    if (loader) loader.style.display = 'none';
+                }, 500);
+            }
+            initScrollAnimations();
+            initCounters();
+        }, 500);
+    });
+
+    // Scroll animations
+    function initScrollAnimations() {
+        const animatedElements = document.querySelectorAll('.scroll-animate');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+        
+        animatedElements.forEach(el => observer.observe(el));
+        
+        // GSAP para elementos de servicio y testimoniales
+        gsap.registerPlugin(ScrollTrigger);
+        
+        gsap.utils.toArray('.service-item').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 40,
+                opacity: 0,
+                duration: 0.6,
+                delay: i * 0.08,
+                ease: "power2.out"
+            });
+        });
+        
+        gsap.utils.toArray('.testimonial-item').forEach((item, i) => {
+            gsap.from(item, {
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                },
+                scale: 0.96,
+                opacity: 0,
+                duration: 0.5,
+                delay: i * 0.15
+            });
+        });
+    }
+
+    // Contadores animados
+    function initCounters() {
+        const counters = document.querySelectorAll('.counter');
+        
+        counters.forEach(counter => {
+            const target = counter.getAttribute('data-target');
+            const suffix = counter.getAttribute('data-suffix') || '';
+            let targetNum = parseInt(target);
+            
+            const updateCounter = (current) => {
+                if (suffix === 'M+') {
+                    counter.innerText = Math.floor(current) + 'M+';
+                } else if (suffix === '%') {
+                    counter.innerText = Math.floor(current) + '%';
+                } else {
+                    counter.innerText = Math.floor(current);
+                }
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        let current = 0;
+                        const increment = targetNum / 50;
+                        const interval = setInterval(() => {
+                            current += increment;
+                            if (current >= targetNum) {
+                                if (suffix === 'M+') counter.innerText = target + 'M+';
+                                else if (suffix === '%') counter.innerText = target + '%';
+                                else counter.innerText = target;
+                                clearInterval(interval);
+                            } else {
+                                updateCounter(current);
+                            }
+                        }, 25);
+                        observer.unobserve(counter);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            observer.observe(counter);
+        });
+    }
+
+    // Mobile menu
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (mobileBtn && mobileMenu) {
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    }
+
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (navbar) {
+            if (window.scrollY > 50) {
+                navbar.classList.add('glass-premium', 'shadow-md');
+                navbar.classList.remove('bg-transparent');
+            } else {
+                navbar.classList.remove('glass-premium', 'shadow-md');
+            }
+        }
+    });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href');
+            if (targetId === "#" || targetId === "") return;
+            const target = document.querySelector(targetId);
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            }
+        });
+    });
+
+    // Formulario
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name')?.value.trim();
+            const email = document.getElementById('email')?.value.trim();
+            
+            if (!name) {
+                alert('Por favor ingresa tu nombre completo.');
+                return;
+            }
+            if (!email) {
+                alert('Por favor ingresa tu correo electrónico.');
+                return;
+            }
+            if (!email.includes('@') || !email.includes('.')) {
+                alert('Por favor ingresa un correo electrónico válido.');
+                return;
+            }
+            
+            alert(`✅ ¡Gracias ${name}!\n\nHemos recibido tu solicitud. Un asesor financiero se comunicará contigo en las próximas 24 horas.`);
+            contactForm.reset();
+        });
+    }
+</script>
+</body>
+</html>
